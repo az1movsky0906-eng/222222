@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Менеджер баннеров</h2>
+<form method="post" enctype="multipart/form-data">
+  <input type="file" name="banner" id="bannerInput">
+  <button type="submit">Загрузить</button>
+</form>
+<div>
+  <img id="preview" style="max-width:100%%;">
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
+<script>
+  const input = document.getElementById('bannerInput');
+  const preview = document.getElementById('preview');
+  let cropper;
+  input.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        preview.src = reader.result;
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(preview, { aspectRatio: 16/9 });
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
+{% endblock %}
